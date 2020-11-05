@@ -1,6 +1,29 @@
 # This is my first exercise applying a PEDAC process
+# See the code below and the PEDAC process at the bottom
 
-=begin 
+puts "Welcome to the calculator program"
+
+puts "Please enter a number"
+number1 = gets.chomp
+puts "Please enter a second number"
+number2 = gets.chomp
+puts "Please select one of the following math operations: 1.Add, 2.Substract, 3. Multiply, 4.Divide"
+operation = gets.chomp
+
+if operation == '1'
+  result = number1.to_i + number2.to_i
+elsif operation == '2'
+  result =  number1.to_i - number2.to_i
+elsif operation == '3'
+  result =  number1.to_i * number2.to_i
+else
+  result =  number1.to_f / number2.to_f
+end
+
+puts "The result is: #{result}"
+
+=begin
+ 
 PEDAC process
 1) Understanding the problem
   - I have to build a calculator program
@@ -32,26 +55,3 @@ Rules: if division left remainder, use floats
 - puts the result to screen 
 
 =end
-
-# code:
-
-puts "Welcome to the calculator program"
-
-puts "Please enter a number"
-number1 = gets.chomp
-puts "Please enter a second number"
-number2 = gets.chomp
-puts "Please select one of the following math operations: 1.Add, 2.Substract, 3. Multiply, 4.Divide"
-operation = gets.chomp
-
-if operation == '1'
-  result = number1.to_i + number2.to_i
-elsif operation == '2'
-  result =  number1.to_i - number2.to_i
-elsif operation == '3'
-  result =  number1.to_i * number2.to_i
-else
-  result =  number1.to_f / number2.to_f
-end
-
-puts "The result is: #{result}"
