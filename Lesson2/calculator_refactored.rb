@@ -7,14 +7,14 @@ end
 
 def valid_number(num)
   num.to_i != 0
-end  
+end
 
 def operation_in_course(op)
-  puts "Adding the two numbers" if op == '1' 
-  puts "Substracting the two numbers" if op == '2' 
-  puts "Multiplying the two numbers" if op == '3' 
+  puts "Adding the two numbers" if op == '1'
+  puts "Substracting the two numbers" if op == '2'
+  puts "Multiplying the two numbers" if op == '3'
   puts "Dividing the two numbers" if op == '4'
-  sleep(1)        
+  sleep(1)
 end
 
 prompt "Welcome to the calculator program"
@@ -26,7 +26,7 @@ loop do
     prompt "Please enter your name"
   else
     break
-  end    
+  end
 end
 
 prompt "Hello #{name}"
@@ -39,8 +39,8 @@ loop do
     if valid_number(number1)
       break
     else
-      prompt "Please enter a valid number"   
-    end  
+      prompt "Please enter a valid number"
+    end
   end
 
   number2 = nil
@@ -50,14 +50,14 @@ loop do
     if valid_number(number2)
       break
     else
-      prompt "Please enter a valid number"  
-    end  
+      prompt "Please enter a valid number"
+    end
   end
 
-  prompt "Please select one of the following math operations:" 
-  prompt "1.Add" 
-  prompt "2.Substract" 
-  prompt "3.Multiply" 
+  prompt "Please select one of the following math operations:"
+  prompt "1.Add"
+  prompt "2.Substract"
+  prompt "3.Multiply"
   prompt "4.Divide"
 
   operation = nil
@@ -66,7 +66,7 @@ loop do
     if %w(1 2 3 4).include?(operation)
       break
     else
-      prompt "Please enter a valid operation from 1 to 4"   
+      prompt "Please enter a valid operation from 1 to 4"
     end
   end
 
@@ -77,9 +77,9 @@ loop do
              number1.to_i - number2.to_i
            when '3'
              number1.to_i * number2.to_i
-           when '4'      
+           when '4'
              number1.to_f / number2.to_f
-  end  
+           end
 
   operation_in_course(operation)
   prompt "The result is: #{result}"
@@ -91,13 +91,13 @@ end
 
 prompt "Ok, thanks for using the calculator. Good bye!"
 
-
 =begin
 PEDAC process
 1) Understanding the problem
   - I have to build a calculator program
-  - that prompts user for two numbers 
-  - that prompts user to choice an operation to perform with these numbers from add, substract, multiply and divide
+  - that prompts user for two numbers
+  - that prompts user to choice an operation to perform with these numbers
+  - choose from add, substract, multiply and divide
   - output the result of the operation
   - validate every user input
   - prompt user for name
@@ -129,18 +129,18 @@ Output: number
 Rules: if division left remainder, use floats
 
 4)Algorithm
-- precede every output msg with '=>'  
+- precede every output msg with '=>'
 - gets user name and welcome them
 - gets two numbers(strings) from user and save them in separate variables
 - gets a math operator from user (+, -, * or /) and save it in a variable
 - validate every user's inputs with loops
-  - output error msg and ask for input again 
+  - output error msg and ask for input again
 - perform the selected math operation
   - convert the two number variables to int and perform chosen operation
-  - if math operator is division 
-    - convert the two number variables to float (so it returns decimals in case division leaves remainder)
+  - if math operator is division
+    - convert number variables to float (return decimals if div has remainder)
 - output the result to screen
-  - puts the name of the operation being carried 
+  - puts the name of the operation being carried
   - sleep for 1 second
   - puts the result of the math operation
 - prompt user to start program again
