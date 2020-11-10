@@ -1,7 +1,13 @@
 # Alonso's mortgage calculator - a program to calculate the monthly cost of your mortgage
 # Note: See the code below and the PEDAC process at the bottom
 
+# ================== Config file for program messages ================== #
+
+require 'yaml'
+MESSAGES = YAML.load_file('mortgage_msg.yml')
+
 # ================== Input validation methods ================== #
+
 def general_prompt(msg)
   puts "--> #{msg}"
 end
@@ -27,15 +33,16 @@ def valid_duration?(num)
 end
 
 # ================== Welcome and instructions ================== #
-puts "Welcome to Alonso's mortgage calculator!"
+
+puts(MESSAGES['welcome'])
 sleep(1)
 
 name = nil
-general_prompt("May I ask your name please?")
+general_prompt(MESSAGES['name'])
 loop do
   name = gets.chomp
   if invalid_name?(name)
-    puts "Please enter a valid name:"
+    puts(MESSAGES['invalid_name'])
   else
     break
   end
@@ -43,50 +50,51 @@ end
 
 puts "Hello #{name}"
 sleep(1)
-puts "I'll calculate for you how much would you pay a month for a mortgage with us."
-puts "First I'd need you to provide some information"
+puts(MESSAGES['instruction_1'])
+puts(MESSAGES['instruction_2'])
 sleep(2)
 
 # ================== Request user input ================== #
-loop do     # main loop --> repeats all from here when user wants to calculate again
+
+loop do # main loop --> repeats all from here when user wants to calculate again
   total_amount = nil
-  general_prompt("May I ask the total amount you are asking for?")
+  general_prompt(MESSAGES['amount'])
   loop do
     total_amount = gets.chomp
     if valid_amount?(total_amount)
       total_amount = total_amount.to_f
       break
     else
-      puts "Please enter a valid amount (no decimals or thousands separators allowed):"
+      puts(MESSAGES['invalid_amount'])
     end
   end
-  puts "Ok, thank you"
+  puts(MESSAGES['thanks_1'])
 
   anual_percentage_rate = nil
-  general_prompt("May I ask which interest rate are you willing to pay anually?")
+  general_prompt(MESSAGES['interest'])
   loop do
     anual_percentage_rate = gets.chomp
     if valid_percentage?(anual_percentage_rate)
       anual_percentage_rate = anual_percentage_rate.to_f / 100
       break
     else
-      puts "Please enter a valid anual percentage rate:"
+      puts MESSAGES['invalid_interest']
     end
   end
-  puts "Ok, got it"
+  puts(MESSAGES['thanks_2'])
 
   mortgage_duration = nil
-  general_prompt("May I ask the number of years over which you want to repay the loan (from 10 to 40 years)")
+  general_prompt(MESSAGES['duration'])
   loop do
     mortgage_duration = gets.chomp
     if valid_duration?(mortgage_duration)
       mortgage_duration = mortgage_duration.to_f
       break
     else
-      puts "Please enter a valid mortgage duration, with a minimun of 10 and a maximum of 40 years:"
+      puts MESSAGES['invalid_duration']
     end
   end
-  puts "Ok, that's great"
+  puts(MESSAGES['thanks_3'])
 
   # ================== Processing input into output ================== #
 
@@ -97,20 +105,20 @@ loop do     # main loop --> repeats all from here when user wants to calculate a
   total_to_pay = (mortgage_duration_in_months * monthly_payment).round(2)
   total_interest = (total_to_pay - total_amount).round(2)
 
-  general_prompt("Ok, give me a second to process all the information")
+  general_prompt(MESSAGES['processing'])
   sleep(2)
   general_prompt("According to the entered details, a mortgage with us would cost you $#{monthly_payment} a month")
   sleep(2)
-  general_prompt("The detailed numbers are:")
+  general_prompt(MESSAGES['detail_nums'])
   detail_prompt("The total amount you will have paid in #{mortgage_duration.to_i} years would be $#{total_to_pay}")
   detail_prompt("The total amount of interests you will have paid at the end would be $#{total_interest}")
 
-  general_prompt("Would you like to calculate a new mortgage?")
+  general_prompt(MESSAGES['start_again'])
   answer = gets.chomp
   break unless answer.downcase == 'yes' || answer.downcase == 'y'
 end
 
-general_prompt("Thank you for using Alonso's mortgage calculator. We hope to see you again soon!")
+general_prompt(MESSAGES['thanks'])
 
 =begin
 PEDAC process
