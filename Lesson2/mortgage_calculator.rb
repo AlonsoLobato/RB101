@@ -1,4 +1,5 @@
-# Alonso's mortgage calculator - a program to calculate the monthly cost of your mortgage
+# Alonso's mortgage calculator
+# a program to calculate the monthly cost of your mortgage
 # Note: See the code below and the PEDAC process at the bottom
 
 # ================== Config file for program messages ================== #
@@ -7,6 +8,10 @@ require 'yaml'
 MESSAGES = YAML.load_file('mortgage_msg.yml')
 
 # ================== Input validation methods ================== #
+
+def clear_screen
+  system('clear') || system('cls')
+end
 
 def general_prompt(msg)
   puts "--> #{msg}"
@@ -29,7 +34,7 @@ def valid_percentage?(num)
 end
 
 def valid_duration?(num)
-  num.to_i.is_a?(Integer) && num.to_i >= 10 && num.to_i <= 40
+  Integer(num, exception: false) && num.to_i >= 10 && num.to_i <= 40
 end
 
 # ================== Welcome and instructions ================== #
@@ -56,7 +61,8 @@ sleep(2)
 
 # ================== Request user input ================== #
 
-loop do # main loop --> repeats all from here when user wants to calculate again
+loop do # main loop --> repeats all from here if user wants to calculate again
+  clear_screen
   total_amount = nil
   general_prompt(MESSAGES['amount'])
   loop do
@@ -101,24 +107,36 @@ loop do # main loop --> repeats all from here when user wants to calculate again
   monthly_percentage_rate = anual_percentage_rate / 12
   mortgage_duration_in_months = mortgage_duration * 12
 
-  monthly_payment = (total_amount * (monthly_percentage_rate / (1 - (1 + monthly_percentage_rate)**(-mortgage_duration_in_months)))).round(2)
+  monthly_payment = (total_amount *
+                    (monthly_percentage_rate /
+                    (1 - (1 + monthly_percentage_rate)**(-mortgage_duration_in_months)))).round(2)
   total_to_pay = (mortgage_duration_in_months * monthly_payment).round(2)
   total_interest = (total_to_pay - total_amount).round(2)
 
   general_prompt(MESSAGES['processing'])
   sleep(2)
-  general_prompt("According to the entered details, a mortgage with us would cost you $#{monthly_payment} a month")
-  sleep(2)
-  general_prompt(MESSAGES['detail_nums'])
-  detail_prompt("The total amount you will have paid in #{mortgage_duration.to_i} years would be $#{total_to_pay}")
-  detail_prompt("The total amount of interests you will have paid at the end would be $#{total_interest}")
 
+  general_prompt("According to the entered details, a mortgage with us"\
+                  " would cost you $#{monthly_payment} a month")
+  sleep(2)
+
+  general_prompt(MESSAGES['detail_nums'])
+
+  detail_prompt("The total amount you will have paid in"\
+                " #{mortgage_duration.to_i} years would be"\
+                " $#{total_to_pay}")
+
+  detail_prompt("The total amount of interests you will"\
+                " have paid at the end would be $#{total_interest}")
+                
   general_prompt(MESSAGES['start_again'])
   answer = gets.chomp
   break unless answer.downcase == 'yes' || answer.downcase == 'y'
 end
 
 general_prompt(MESSAGES['thanks'])
+sleep(2)
+clear_screen
 
 =begin
 PEDAC process
@@ -132,7 +150,7 @@ PEDAC process
 - From that info, we calculate
   - Monthly interest rate (APR / 12 months)
   - Loan durations in months (years user asks mortgage to last * 12)
-  - Monthly payment (monthly principal and interest user will pay for the mortgage)
+  - Monthly payment (monthly principal and interest user will pay)
     - We use the following formula:
       - m = p * (j / (1 - (1 + j)**(-n))) where:
         m = monthly payment (final result)
@@ -151,7 +169,9 @@ Input:
 p = '-150000' or '15000.25' or 'some money' or ' '
 j = '- 6.25' or '0' or ' '
 n = '5' or '2.5' or '50' or 'fifty'
-Output: error: p must be a positive integers | j must be a positive integer or float | n must be a integer between 10 and 40
+Output: error: p must be a positive integers |
+        j must be a positive integer or float |
+        n must be a integer between 10 and 40
 
 3) Data structure
 Integers, floats, strings
@@ -182,7 +202,7 @@ Integers, floats, strings
   - Convert Loan duration in years
     - loan duration * 12
   - Calculate monthly payment with formula m = p * (j / (1 - (1 + j)**(-n)))
-  - Calculate other details: total amount interest and total amount to pay (loan + interest)
+  - Calculate details: total amount interest and total amount to pay (loan + interest)
   - Output message and result of calculation
     - Breakdown result into chapters
 
