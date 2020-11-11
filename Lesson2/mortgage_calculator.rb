@@ -128,7 +128,7 @@ loop do # main loop --> repeats all from here if user wants to calculate again
 
   detail_prompt("The total amount of interests you will"\
                 " have paid at the end would be $#{total_interest}")
-                
+
   general_prompt(MESSAGES['start_again'])
   answer = gets.chomp
   break unless answer.downcase == 'yes' || answer.downcase == 'y'
