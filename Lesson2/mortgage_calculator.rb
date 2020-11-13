@@ -1,8 +1,12 @@
 # Alonso's mortgage calculator:
 # a program that calculates the monthly cost of a mortgage
 
+# ----- config file ----- #
+
 require 'yaml'
 MESSAGES = YAML.load_file('mortgage_msg.yml')
+
+# ----- general methods ----- #
 
 def clear_screen
   system('clear') || system('cls')
@@ -15,6 +19,8 @@ end
 def detail_prompt(msg)
   puts "...... #{msg}"
 end
+
+# ----- input validation methods ----- #
 
 def invalid_name?(str)
   str.to_i != 0 || str.empty?
@@ -31,6 +37,8 @@ end
 def valid_duration?(num)
   Integer(num, exception: false) && num.to_i >= 10 && num.to_i <= 40
 end
+
+# ----- abstraction methods ----- #
 
 def get_user_name
   name = ''
@@ -121,7 +129,7 @@ def get_play_again
   play_again
 end
 
-# ------- Main loop ------- #
+# ------- welcome and main loop ------- #
 
 puts(MESSAGES['welcome'])
 sleep(1)
