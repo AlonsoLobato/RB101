@@ -63,12 +63,12 @@ end
 
 def initials_to_weapons(initials)
   player_weapon = case initials
-    when 'r' then 'rock'
-    when 'p' then 'paper'
-    when 's' then 'scissors'
-    when 'l' then 'lizard'
-    when 'sp' then 'Spock'  
-  end
+                  when 'r' then 'rock'
+                  when 'p' then 'paper'
+                  when 's' then 'scissors'
+                  when 'l' then 'lizard'
+                  when 'sp' then 'Spock'
+                  end
   player_weapon
 end
 
@@ -111,11 +111,11 @@ end
 
 def update_scores(player_weapon, computer_weapon, scores)
   if winner(player_weapon, computer_weapon)
-    scores[:player_score] += 1 
-  elsif winner(computer_weapon, player_weapon)  
-    scores[:computer_score] += 1 
+    scores[:player_score] += 1
+  elsif winner(computer_weapon, player_weapon)
+    scores[:computer_score] += 1
   end
-end    
+end
 
 def display_scores(scores)
   puts " —————————————————————"
@@ -135,15 +135,15 @@ end
 
 def grand_winner(scores)
   if scores[:player_score] == 5
-    prompt("WELL DONE, YOU ARE THE WINNER!") 
-    prompt ("You reached 5 points. Congrats!!!")
+    prompt("WELL DONE, YOU ARE THE WINNER!")
+    prompt("You reached 5 points. Congrats!!!")
     puts " "
-    return true 
+    true
   elsif scores[:computer_score] == 5
-    prompt("GAME OVER!") 
+    prompt("GAME OVER!")
     prompt("The computer has reached 5 points. Good luck next time :(")
     puts " "
-    return true 
+    true
   end
 end
 
@@ -158,15 +158,15 @@ def get_play_again
       prompt("Sorry, I didn't get that. Please type yes or no")
     end
   end
-  return play_again.downcase!
+  play_again.downcase!
 end
 
-# ——————— MAIN LOOP ——————— #
+# ====== MAIN LOOP ====== #
 loop do
   clear_screen
   welcome_msg
   instructions_msg
-  scores = {player_score: 0, computer_score: 0}
+  scores = { player_score: 0, computer_score: 0 }
   loop do
     player_weapon = player_weapon_choice
     computer_weapon = VALID_CHOICES.sample
