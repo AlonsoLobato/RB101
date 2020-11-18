@@ -141,7 +141,7 @@ def both_choices(player_weapon, computer_weapon)
 end
 
 def grand_winner?(scores)
-  if scores[:player_score] == POINTS_TO_WIN || 
+  if scores[:player_score] == POINTS_TO_WIN ||
      scores[:computer_score] == POINTS_TO_WIN
     true
   end
@@ -196,4 +196,3 @@ end
 prompt("Thanks for playing. Goodbye!")
 sleep(2)
 clear_screen
-
