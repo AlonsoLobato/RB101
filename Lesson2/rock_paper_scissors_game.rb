@@ -2,6 +2,16 @@
 
 VALID_CHOICES = %w(rock paper scissors lizard Spock)
 
+POINTS_TO_WIN = 5
+
+BEATS = {
+  rock: ['scissors', 'lizard'],
+  paper: ['rock', 'Spock'],
+  scissors: ['paper', 'lizard'],
+  Spock: ['scissors', 'rock'],
+  lizard: ['Spock', 'paper']
+}
+
 def clear_screen
   system('clear') || system('cls')
 end
@@ -10,7 +20,7 @@ def prompt(msg)
   puts("=> #{msg}")
 end
 
-def long_prompt(msg)
+def paused_prompt(msg)
   puts("#{msg}")
   sleep(1)
 end
@@ -27,23 +37,27 @@ def welcome_msg
   sleep(2)
 end
 
+def display_rules_song
+  paused_prompt("Scissors cut paper")
+  paused_prompt("Paper covers rock")
+  paused_prompt("Rock crushes lizard")
+  paused_prompt("Lizard poisons Spock")
+  paused_prompt("Spock smashes scissors")
+  paused_prompt("Scissors decapitate lizard")
+  paused_prompt("Lizard eats paper")
+  paused_prompt("Paper disproves Spock")
+  paused_prompt("Spock vaporises rock")
+  paused_prompt("and as it always has...")
+  paused_prompt("Rock crushes scissors")
+end
+
 def instructions_msg
   puts "YOU MUST REMEMBER THAT:"
-  long_prompt("-----------------------")
-  long_prompt("Scissors cut paper")
-  long_prompt("Paper covers rock")
-  long_prompt("Rock crushes lizard")
-  long_prompt("Lizard poisons Spock")
-  long_prompt("Spock smashes scissors")
-  long_prompt("Scissors decapitate lizard")
-  long_prompt("Lizard eats paper")
-  long_prompt("Paper disproves Spock")
-  long_prompt("Spock vaporises rock")
-  long_prompt("and as it always has...")
-  long_prompt("Rock crushes scissors")
+  paused_prompt("-----------------------")
+  display_rules_song
   puts " "
-  long_prompt("Got it?")
-  long_prompt("Let's play!")
+  paused_prompt("Got it?")
+  paused_prompt("Let's play!")
   puts " "
 end
 
@@ -89,14 +103,7 @@ def player_weapon_choice
 end
 
 def winner(player1, player2)
-  beats = {
-    rock: ['scissors', 'lizard'],
-    paper: ['rock', 'Spock'],
-    scissors: ['paper', 'lizard'],
-    Spock: ['scissors', 'rock'],
-    lizard: ['Spock', 'paper']
-  }
-  beats[player1.to_sym].include?(player2)
+  BEATS[player1.to_sym].include?(player2)
 end
 
 def display_result(player_weapon, computer_weapon)
@@ -126,24 +133,29 @@ def display_scores(scores)
 end
 
 def both_choices(player_weapon, computer_weapon)
-  long_prompt("Ready")
-  long_prompt("steady")
-  long_prompt("go!")
+  paused_prompt("Ready")
+  paused_prompt("steady")
+  paused_prompt("go!")
   clear_screen
   prompt("You chose #{player_weapon.upcase}, computer chose #{computer_weapon.upcase}")
 end
 
-def grand_winner(scores)
-  if scores[:player_score] == 5
+def grand_winner?(scores)
+  if scores[:player_score] == POINTS_TO_WIN || 
+     scores[:computer_score] == POINTS_TO_WIN
+    true
+  end
+end
+
+def display_grand_winner(scores)
+  if scores[:player_score] == POINTS_TO_WIN
     prompt("WELL DONE, YOU ARE THE WINNER!")
     prompt("You reached 5 points. Congrats!!!")
     puts " "
-    true
-  elsif scores[:computer_score] == 5
+  elsif scores[:computer_score] == POINTS_TO_WIN
     prompt("GAME OVER!")
     prompt("The computer has reached 5 points. Good luck next time :(")
     puts " "
-    true
   end
 end
 
@@ -151,14 +163,14 @@ def get_play_again
   play_again = ''
   prompt("Do you want to play again?")
   loop do
-    play_again = gets.chomp
-    if %w(yes y no n).include?(play_again.downcase)
+    play_again = gets.chomp.downcase
+    if %w(yes y no n).include?(play_again)
       break
     else
       prompt("Sorry, I didn't get that. Please type yes or no")
     end
   end
-  play_again.downcase!
+  play_again.downcase
 end
 
 # ====== MAIN LOOP ====== #
@@ -174,8 +186,9 @@ loop do
     display_result(player_weapon, computer_weapon)
     update_scores(player_weapon, computer_weapon, scores)
     display_scores(scores)
-    break if grand_winner(scores)
+    break if grand_winner?(scores)
   end
+  display_grand_winner(scores)
   play_again = get_play_again
   break unless play_again.start_with?('y')
 end
@@ -183,3 +196,4 @@ end
 prompt("Thanks for playing. Goodbye!")
 sleep(2)
 clear_screen
+
