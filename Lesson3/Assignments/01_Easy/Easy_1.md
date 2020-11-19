@@ -72,3 +72,11 @@ Describe the difference between `!` and `?` in Ruby. And explain what would happ
   We put it before an object name and it'll return true if the object is truthy or false if falsey (if flase or nil). 
 
 ### Question 3
+
+Replace the word "important" with "urgent" in this string:
+
+```ruby
+advice = "Few things in life are as important as house training your pet dinosaur."
+```
+
+#### My answer
