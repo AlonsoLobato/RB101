@@ -305,7 +305,7 @@ Did the family's data get ransacked? Why or why not?
 - As `Hash#values` method returns an array with only the values of a given hash the `#each` method would be an `Array#each`, which returns a mutated arraym according to the operation requested in the block.
 
 - So in this case `Hash#values` returns an array of hashes like this [{ "age" => 32, "gender" => "male" },{ "age" => 30, "gender" => "female" }, etc]. Then `Array#each` mutates this array performing changes on the elements `age` and `gender` of each `family_member`.  
-- `family_member` is the parameter that the block uses to refer to the object(s) where it will perform its actions (in this case this referst to each element of the newly created array). 
+- `family_member` is a parameter called block variable and its a reference to the element that the enumerable is iterating over (in this case the elements of the newly created array). 
 
 ##### NOTES: 
 

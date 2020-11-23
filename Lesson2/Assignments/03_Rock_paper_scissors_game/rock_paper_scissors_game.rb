@@ -140,19 +140,21 @@ def both_choices(player_weapon, computer_weapon)
   prompt("You chose #{player_weapon.upcase}, computer chose #{computer_weapon.upcase}")
 end
 
+def won_match?(scores)
+  scores == POINTS_TO_WIN
+end
+
 def grand_winner?(scores)
-  if scores[:player_score] == POINTS_TO_WIN ||
-     scores[:computer_score] == POINTS_TO_WIN
-    true
-  end
+  won_match?(scores[:player_score]) ||
+  won_match?(scores [:computer_score])
 end
 
 def display_grand_winner(scores)
-  if scores[:player_score] == POINTS_TO_WIN
+  if won_match?(scores[:player_score])
     prompt("WELL DONE, YOU ARE THE WINNER!")
     prompt("You reached 5 points. Congrats!!!")
     puts " "
-  elsif scores[:computer_score] == POINTS_TO_WIN
+  elsif won_match?(scores [:computer_score])
     prompt("GAME OVER!")
     prompt("The computer has reached 5 points. Good luck next time :(")
     puts " "
