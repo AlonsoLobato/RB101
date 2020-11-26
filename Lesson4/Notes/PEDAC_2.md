@@ -31,7 +31,7 @@ Imagine a sequence of consecutive even integers beginning with 2. The integers a
 #### Visual representation of the sequence:
 
 *as we can deduce from the problem statement*
-
+```ruby
 2, 4, 6, 8, 10, 12, 14, 16, 18, 20, ...
 
 2
@@ -39,7 +39,7 @@ Imagine a sequence of consecutive even integers beginning with 2. The integers a
 8, 10, 12
 14, 16, 18, 20
 ... *=> as many rows as the input integers indicates*
-
+```
 #### Questions:
 
 *in order to understand the implicit requirements*
@@ -48,7 +48,7 @@ Imagine a sequence of consecutive even integers beginning with 2. The integers a
 
 
 ### E: EXAMPLES AND TEST CASES
-
+```ruby
 row number: 1 --> sum of integers in row: 2
 row number: 2 --> sum of integers in row: 10
 row number: 4 --> sum of integers in row: 68
@@ -57,16 +57,18 @@ row number: 4 --> sum of integers in row: 68
 2 -->  2
 4, 6 --> 10
 14, 16, 18, 20 --> 68
-
+```
 
 ### D: DATA STRUCTURES
 
 #### Having this visual representation...
+```ruby
 2
 4, 6
 8, 10, 12
 14, 16, 18, 20
 ... 
+```
 
 #### ...we can assume that:
 - Overall structure represents sequence as a whole
@@ -74,7 +76,7 @@ row number: 4 --> sum of integers in row: 68
 - Individual rows in a set order in context of sequence
 - Individual rows contain integers
 - Can assume that integers are in a set order in the context of the sequence
-
+```ruby
 [
   [2],
   [4, 6],
@@ -82,7 +84,7 @@ row number: 4 --> sum of integers in row: 68
   [14, 16, 18, 20],
   ...
 ]
-
+```
 ### A: Algorithm
 
 **First we document our understanding of the problem so far, in steps**
@@ -117,13 +119,14 @@ row number: 4 --> sum of integers in row: 68
 - Input: the information needed to create the output
   - the starting integer
   - length of the row
-- Output: the row itself: [8, 10, 12]
+- Output: the row itself: `[8, 10, 12]`
 
 ##### Examples / test cases:
+```ruby
 start: 2, length: 1 --> [2]
 start: 4, length: 2 --> [4, 6]
 start: 8, length: 3 --> [8, 10, 12]
-
+```
 ##### Data structure:
 - An array of integers
 
@@ -155,22 +158,22 @@ end
 *we use the test cases we created in the step 2) Example/Test Cases*
 *we want to run the code often, so we can make sure is working as expected* 
 *we use these test cases to make sure we get the expected output*
-
+```ruby
 row number: 1 --> sum of integers in row: 2
 row number: 2 --> sum of integers in row: 10
 row number: 4 --> sum of integers in row: 68
 
-```ruby
+
 p sum_even_number_row(1) == 2 # => true
 p sum_even_number_row(2) == 10 
 p sum_even_number_row(4) == 68
-```
+
 -----
+
 start: 2, length: 1 --> [2]
 start: 4, length: 2 --> [4, 6]
 start: 8, length: 3 --> [8, 10, 12]
 
-```ruby
 p create_row(2, 1) == [2] #=> true
 p create_row(4, 2) == [4, 6]
 p create_row(8, 3) == [8, 10, 12]

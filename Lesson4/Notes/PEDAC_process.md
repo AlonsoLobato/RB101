@@ -1,9 +1,9 @@
-## PEDAC: Example 2 - 
+## PEDAC: BASIC STEPS AND THINGS TO CONSIDER 
 
 ### P: Understanding the Problem
 
-*This is probably the most important step in terms of stabilsinh a frame of reference for understanding the problem and determining a solution*
-*We will need to refere to this step and refactor things several times through the process*
+*This is probably the most important step in terms of stabilsinh a frame of reference for understanding the problem and determining a solution.*
+*We will need to refere to this step and refactor things several times through the process.*
 *Spend enough time, don't rush this step*
 
 **Steps**
