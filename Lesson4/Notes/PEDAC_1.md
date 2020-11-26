@@ -1,4 +1,4 @@
-## PEDAC
+## PEDAC: Example 1 - Palindromes
 
 Problem statement and test cases provided to follow:
 
@@ -6,7 +6,7 @@ Problem statement and test cases provided to follow:
 
 - Given a string, write a method `palindrome_substrings` which returns all the substrings from a given string which are palindromes. Consider palindrome words case sensitive.
 
-#### Test cases:
+#### Examples and Test cases:
 
 ```ruby
 palindrome_substrings("supercalifragilisticexpialidocious") == ["ili"]
