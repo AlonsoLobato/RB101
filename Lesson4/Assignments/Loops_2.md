@@ -356,13 +356,3 @@ end
 
 - In this case, we want to call the `greeting` method two times. To do this, we'll make our conditional evaluate to `true` until `number_of_greetings` is less than 1. We control the value of `number_of_greetings` by subtracting 1 on each iteration. 
 - I opted for integrating the loop in the method definition.
-
-
-=======
-### Exercise :
-#### My answer
-#### School answer
-##### NOTES 
-```ruby
-
-```
