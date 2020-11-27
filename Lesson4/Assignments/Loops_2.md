@@ -64,7 +64,7 @@ end
 
 ##### NOTES 
 
-`Comparable#between?` method takes two arguments and returns a boolean, `true` or `false`, if the caller's value is between the two integers provided. In this case, we use it in an `if` condition that will execute break when `#between?` returns true.
+- `Comparable#between?` method takes two arguments and returns a boolean, `true` or `false`, if the caller's value is between the two integers provided. In this case, we use it in an `if` condition that will execute break when `#between?` returns true.
 
 ### Exercise 3: Conditional Loop
 
@@ -242,7 +242,120 @@ end
 
 #### My answer
 
-TO DO!
+```ruby
+number = 0
+
+until number == 10
+  number += 1
+  next if number.odd?
+  puts number
+end
+```
+
+##### NOTES 
+
+- `next` lets you skip to the next iteration based on certain conditions. In this exercise, we use `next` to skip to the next iteration when `number` is odd.
+- `next` is placed between the `incrementation` of number and the `puts` so the condition to skip the number is executed every time the number is incremented; if the `if` condition is met, the loop skip to `next` iteration without performing any change, otherwise the `number` is printed.
+
+### Exercise 9: First to five
+
+The following code increments `number_a` and n`umber_b` by either 0 or 1. `loop` is used so that the variables can be incremented more than once, however, `break` stops the loop after the first iteration. Use `next` to modify the code so that the loop iterates until either `number_a` or `number_b` equals `5`. Print `"5 was reached!"` before breaking out of the loop.
+
+```ruby
+number_a = 0
+number_b = 0
+
+loop do
+  number_a += rand(2)
+  number_b += rand(2)
+
+  break
+end
+```
+
+#### My answer
+
+```ruby
+number_a = 0
+number_b = 0
+
+loop do
+  number_a += rand(2)
+  number_b += rand(2) 
+  if number_a == 5 || number_b == 5
+    puts "5 was reached"
+    break
+  else
+    next  
+  end
+end
+```
+
+#### School answer 
+
+```ruby
+number_a = 0
+number_b = 0
+
+loop do
+  number_a += rand(2)
+  number_b += rand(2)
+  next unless number_a == 5 || number_b == 5
+
+  puts '5 was reached!'
+  break
+end
+```
+
+##### NOTES 
+
+- We can use `next` to skip the rest of the current iteration based on a condition. Here, by placing `next` before `#puts` and `break`, we can skip to the next iteration so they aren't processed until we stop skipping. We use an `unless` condition for `next` that won't evaluate to `true` unless either `number_a` or `number_b` equal `5`. This lets us put whatever we want after next and not have to worry about it being processed until `next` stops skipping.
+
+### Exercise 10: Greeting
+
+Given the code below, use a `while` loop to print `"Hello!"` twice.
+
+```ruby
+def greeting
+  puts 'Hello!'
+end
+
+number_of_greetings = 2
+```
+
+#### My answer
+
+```ruby
+def greeting
+  number_of_greetings = 2
+  while number_of_greetings != 0
+    puts 'Hello!'
+    number_of_greetings -= 1
+  end  
+end
+
+puts greeting   # method invocation
+```
+
+#### School answer
+
+```ruby
+def greeting
+  puts 'Hello!'
+end
+
+number_of_greetings = 2
+
+while number_of_greetings > 0
+  greeting
+  number_of_greetings -= 1
+end
+```
+
+##### NOTES 
+
+- In this case, we want to call the `greeting` method two times. To do this, we'll make our conditional evaluate to `true` until `number_of_greetings` is less than 1. We control the value of `number_of_greetings` by subtracting 1 on each iteration. 
+- I opted for integrating the loop in the method definition.
 
 
 =======
