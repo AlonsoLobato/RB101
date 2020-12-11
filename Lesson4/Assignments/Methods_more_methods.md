@@ -238,7 +238,7 @@ end
 - The return value of the above code will be `[1, nil, nil]`
 - Whereas the output of the code will be integers `2` and `3`
 - Why?
-  - `map` transform a collection (arr, hash, range) into a new array by going over every element and applying some logic to it (with a block)
+  - `map` transforms a collection (arr, hash, range) into a new array by going over every element and applying some logic to it (with a block)
   - In this case, the logic says, output the element if greater than 1, return the element otherwise. 
   - First element of arr does not meet the if statement requirement, therefore it falls into the `else` branch and it gets returned
   - Second and third elements, otherwise, fall into the if branch of the if/else statement, therefore get printed to the screen and `output` returns `nil`

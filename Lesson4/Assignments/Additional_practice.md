@@ -573,6 +573,77 @@ end
 
 - In the second code, the method used in the block is not mutating. The output will be `1`, `2` and the return will be [3, 4]
 
+##### NOTES 
+- The first code will output `1`, `3` in separate lines and will return `[3, 4]`
+- The second code will output `1`, `2` in separate lines and will return `[1, 2]`
+
+- My mistake was not to consider that `each` is a sort of `loop`, 
+- That loop uses the collection elements as reference to the indexes of themselves within the collection (instead of using a counter, like simple loops do) to iterate over the size of the collection. 
+- So, in the example with `shift` method we are shortening the array at the same time that we are incrementing the index reference, so there is a moment where the loop breaks out as it has iterate all elements, according to the element indexes (in a simple loop this would be expressed as break if counter == array.size)
+- In the example with the `pop` method we are doing the same but shortening the array from the end, instead of from the beginning.
+- For better understanding see below a replica of the same method using a simple `loop`
+
+```ruby
+numbers = [1, 2, 3, 4]
+counter = 0
+
+loop do
+  break if counter == numbers.size
+
+  p numbers[counter]      # equivalent to p number in original code
+  numbers.shift(1)      # removes the first element shifting all other elements down by one
+
+  counter += 1
+end
+# => 1
+# => 3
+# => [3, 4] 
+```
+
+- For even further understanding, I've added some `puts` to the above code (*run this code for better understanding!*)
+
+```ruby
+numbers = [1, 2, 3, 4]
+counter = 0
+
+loop do
+  break if counter == numbers.size
+
+  current = numbers[counter]
+
+  puts "=> We are now at iteration '#{counter}' (so going through index[#{counter}] of #{numbers})"
+  puts "=> 'p number' outputs '#{current}' at this point (which is the element at index[#{counter}])"
+
+  removed = numbers.shift(1)
+  
+  puts " "
+  puts "=> After calling 'shift(1)', '#{removed}' gets removed from the collection"
+  puts "=> and the elements left are #{numbers}"
+  puts " "
+
+  counter += 1
+  puts "=> Then increment counter by 1, so we move to iteration '#{counter}'"
+  puts " "
+end
+
+puts "=> At this point the counter(#{counter}) equals the size of the collection, so the loop breaks"
+puts "=> and finally, the return value is #{numbers}"
+```
+
+- Check this shorter and explain answer out. Seen at the discussion forum:
+
+```ruby
+numbers = [1, 2, 3, 4]
+process the first element
+  p the_first_number # 1
+  numbers.shift # array is now [2, 3, 4]
+process the second element
+  p the_second_number_in_array_as_it_now_is # 3
+  numbers.shift # array is now [3, 4]
+process the third element
+  Oops. There is no third element
+```
+
 #### School answer
 - The first code will output `1`, `3` in separate lines and will return `[3, 4]`
 - The second code will output `1`, `2` in separate lines and will return `[1, 2]`

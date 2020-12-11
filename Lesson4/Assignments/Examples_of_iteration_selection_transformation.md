@@ -264,6 +264,11 @@ end
 ##### NOTES 
 - The original argument, produce_list, is not mutated
 - A new hash is returned by the method (as opposed to an array or string)
+- This exercise shows what goes on in the `Array#select` and `Hash#select` methods. See below the same result with shorter code (using `select` method) *more on this later on in the `methods_more_methods` exercise file*
+
+```ruby
+p produce.select {|k, v| v == 'Fruit'}
+```
 
 ==================================================================
 
@@ -622,3 +627,78 @@ end
 ##### NOTES 
 - If we understand what the return value is, we can chain other methods to it
 - In this case the method returns a string, so we can chain the `String#size` method to count the number of times `character` is repeated in `string`: `select_letter(question, 'a').size # => 8`
+
+
+==================================================================
+
+### Annex 1: emulating include? method
+
+What goes on under the hood with `include?` method explained through a basic looping structure with an array collection and a hash collection
+
+#### Code 1
+
+Replicate the following `Array#include?` code using a basic `loop` 
+
+```ruby
+[1, 2, 3].include?(1) # => true` with basic looping
+```
+
+```ruby
+def include?(collection, match)
+  counter = 0
+
+  loop do
+    break if counter == collection.size
+
+    current_element = collection[counter]
+
+    if current_element == match
+      return true
+    end
+
+    counter += 1
+  end
+  return false
+end
+
+arr = [1, 2, 3]
+p include?(arr, 1) # => true
+```
+
+#### Code 2
+
+Replicate the following `Hash#include?` code using a basic `loop` 
+
+```ruby
+{ a: "ant", b: "bear", c: "cat" }.include?("ant")
+```
+
+*Notice that `Hash#include?` only considers keys, not values, so the previous code will throw a method error. For this example, we'll convert the hash into a keys array and access the values with the keys as index*
+
+
+```ruby
+def include?(collection, match)
+  keys = collection.keys
+  counter = 0
+
+  loop do
+
+    break if counter == keys.length
+
+    current_element = keys[counter]
+    current_value = collection[current_element]
+
+    if current_value == match || current_element == match
+      return true
+    end
+
+    counter += 1
+  end
+  return false
+
+end
+hash = { a: "ant", b: "bear", c: "cat" }
+
+p include?(hash, :a) # => true
+p include?(hash, "bear") # => true
+```
