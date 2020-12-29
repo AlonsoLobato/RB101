@@ -1,5 +1,5 @@
 ## Practice Problems: 
-### Sorting, Nested Collections and Working with Blocks
+### *Sorting, Nested Collections and Working with Blocks*
 
 ### Practice Problem 1
 
@@ -20,7 +20,7 @@ p sorted_arr
 
 ##### NOTES 
 - We have to convert the elements from strings to integers with `#to_i` otherwise, the `#sort` method does not work
-- Also, we have to call `#sort` with a block and two variables as parameters (`a` and `b` in this case), so we can indicate the order is descendind with b `<=> a`
+- Also, we have to call `#sort` with a block and two variables as parameters (`a` and `b` in this case), so we can indicate the order is descendind with `b <=> a`
 
 ### Practice Problem 2
 
@@ -91,7 +91,7 @@ hsh2[:third].keys.join
 
 ##### NOTES 
 1. We reference element at index 2 `['c', ['d', 'e', 'f', 'g']]` then element at index 1 `['d', 'e', 'f', 'g']` then element at index 3 `'g'`
-2. We reference at element at index 1 `{first: ['a', 'b', 'c'], second: ['d', 'e', 'f']}, {third: ['g', 'h', 'i']}` then we use key reference `[:third] and element at index 0 `'g'`
+2. We reference at element at index 1 `{first: ['a', 'b', 'c'], second: ['d', 'e', 'f']}, {third: ['g', 'h', 'i']}` then we use key reference `[:third]` and element at index 0 `'g'`
 3. We reference at element at index 2 `{third: ['ghi']}` then at key reference `[:third]` and then `[0][0]` to reference the first char `'g'` of element at index 0 `['ghi']`
 4. We use key reference `['b']` element at index 1 of `['f', 'g']` is `'g'`
 5. We use key reference `[:third]` and then we extract the key with `Hash#keys` method and convert the resulting array to string with `Array#join` method
