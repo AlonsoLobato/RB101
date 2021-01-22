@@ -1,5 +1,5 @@
 # Tic-tac-toe game
-# Launch School practice exercise 
+# Launch School practice exercise
 # Jan 2021
 
 # ------------------ constants
