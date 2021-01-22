@@ -1,15 +1,15 @@
 # Rock Paper Scissors Lizard Spock game
 
-VALID_CHOICES = %w(rock paper scissors lizard Spock)
+VALID_CHOICES = %w(rock paper scissors lizard spock)
 
 POINTS_TO_WIN = 5
 
 BEATS = {
   rock: ['scissors', 'lizard'],
-  paper: ['rock', 'Spock'],
+  paper: ['rock', 'spock'],
   scissors: ['paper', 'lizard'],
-  Spock: ['scissors', 'rock'],
-  lizard: ['Spock', 'paper']
+  spock: ['scissors', 'rock'],
+  lizard: ['spock', 'paper']
 }
 
 def clear_screen
@@ -81,7 +81,7 @@ def initials_to_weapons(initials)
                   when 'p' then 'paper'
                   when 's' then 'scissors'
                   when 'l' then 'lizard'
-                  when 'sp' then 'Spock'
+                  when 'sp' then 'spock'
                   end
   player_weapon
 end
