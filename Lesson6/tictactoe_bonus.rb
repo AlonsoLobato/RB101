@@ -1,3 +1,7 @@
+# Tic-tac-toe game
+# Launch School practice exercise 
+# Jan 2021
+
 # ------------------ constants
 WINNING_LINES = [[1, 2, 3], [4, 5, 6], [7, 8, 9]] +
                 [[1, 4, 7], [2, 5, 8], [3, 6, 9]] +
@@ -16,13 +20,13 @@ end
 
 def welcome_msg
   system 'clear'
-  prompt "Welcome to the classic Tic-Tac-Toe."
-  prompt "The first to 3 rounds wins the game!"
+  prompt "Welcome to the classic Tic-Tac-Toe game."
+  prompt "The first to 3 rounds wins!"
   sleep(2)
 end
 
 def goodbye_msg
-  prompt "Thanks for playing Tic Tac Toe. Goodbye!"
+  prompt "Thanks for playing Tic-Tac-Toe. Goodbye!"
 end
 
 # rubocop:disable Metrics/AbcSize
