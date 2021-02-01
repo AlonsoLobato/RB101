@@ -22,7 +22,7 @@ def welcome_msg
   system 'clear'
   prompt "Welcome to the classic Tic-Tac-Toe game."
   prompt "The first to 3 rounds wins!"
-  sleep(2)
+  sleep(3)
 end
 
 def goodbye_msg
@@ -82,40 +82,26 @@ def player_places_piece!(brd)
 end
 
 # Bonus: Computer AI
-def find_at_risk_squares(brd)
-  at_risk = []
+def possible_best_moves(brd, marker)
+  possible_best_moves = []
   WINNING_LINES.each do |line|
-    if brd.values_at(*line).count(PLAYER_MARKER) == SQUARES_IN_LINE - 1
+    if brd.values_at(*line).count(marker) == 2
       line.each do |square|
-        if brd[square] == INITIAL_MARKER
-          at_risk << square
+        if brd[square] == INITIAL_MARKER 
+          possible_best_moves << square
         end
       end
     end
   end
-  at_risk
+  possible_best_moves
 end
 
-def at_risk_squares?(brd)
-  find_at_risk_squares(brd).count != 0
-end
-
-def find_winning_squares(brd)
-  winning_square = []
-  WINNING_LINES.each do |line|
-    if brd.values_at(*line).count(COMPUTER_MARKER) == SQUARES_IN_LINE - 1
-      line.each do |square|
-        if brd[square] == INITIAL_MARKER
-          winning_square << square
-        end
-      end
-    end
+def find_best_move(brd)
+  if possible_best_moves(brd, COMPUTER_MARKER).count != 0
+    'Attack_move'
+  elsif possible_best_moves(brd, PLAYER_MARKER).count != 0  
+    'Defense_move'
   end
-  winning_square
-end
-
-def winning_square?(brd)
-  find_winning_squares(brd).count != 0
 end
 
 def middle_square_empty?(brd)
@@ -123,10 +109,10 @@ def middle_square_empty?(brd)
 end
 
 def computer_places_piece!(brd)
-  if winning_square?(brd)
-    brd[find_winning_squares(brd).sample] = COMPUTER_MARKER
-  elsif at_risk_squares?(brd)
-    brd[find_at_risk_squares(brd).sample] = COMPUTER_MARKER
+  if find_best_move(brd) == 'Attack_move'
+    brd[possible_best_moves(brd, COMPUTER_MARKER).sample] = COMPUTER_MARKER
+  elsif find_best_move(brd) == 'Defense_move'
+    brd[possible_best_moves(brd, PLAYER_MARKER).sample] = COMPUTER_MARKER
   elsif middle_square_empty?(brd)
     brd[5] = COMPUTER_MARKER
   else
@@ -145,7 +131,7 @@ def display_round_winner(brd, scr)
   else
     prompt "It's a tie"
   end
-  sleep(1)
+  sleep(2)
 end
 
 def detect_round_winner(brd)
