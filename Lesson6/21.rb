@@ -60,7 +60,7 @@ def display_welcome_banner
 end
 # rubocop:enable Metrics/AbcSize, Metrics/MethodLength, Layout/LineLength
 
-def user_wants_instructions
+def ask_want_instructions
   answer = nil
   valid_answers = ['yes', 'y', 'no', 'n']
   loop do
@@ -168,6 +168,7 @@ end
 def display_dealer_card(hand)
   cs = hand[0][-1]           # fcs stands for card suit
   cv = hand[0].center(8)     # fcv stands for card value
+
   puts "And this is the one card you can see of dealer's initial hand:"
   puts "┌────────────┐ ┌────────────┐"
   puts "│ #{cs}        #{cs} │ │            │"
@@ -187,6 +188,7 @@ end
 def display_extra_card(hand)
   cs = hand[-1][-1]           # fcs stands for card suit
   cv = hand[-1].center(8)     # fcv stands for card value
+
   clear_screen
   puts "This is your new card:"
   puts "┌────────────┐"
@@ -338,7 +340,7 @@ def initialize_scores
   { player_score: 0, dealer_score: 0 }
 end
 
-def update_scores(player_hand, dealer_hand, score)
+def update_scores!(player_hand, dealer_hand, score)
   winner = detect_round_winner(player_hand, dealer_hand)
   if winner == 'player' || busted?(dealer_hand)
     score[:player_score] += 1
@@ -393,7 +395,7 @@ end
 display_welcome_banner
 
 loop do
-  display_instructions if user_wants_instructions.start_with?('y')
+  display_instructions if ask_want_instructions.start_with?('y')
   score = initialize_scores
 
   loop do
@@ -427,7 +429,7 @@ loop do
     end
 
     # determine winner and display round summary
-    update_scores(player_hand, dealer_hand, score)
+    update_scores!(player_hand, dealer_hand, score)
     display_round_winner(player_hand, dealer_hand)
     display_round_summary(player_hand, dealer_hand, score)
 
