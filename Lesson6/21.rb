@@ -60,17 +60,17 @@ def display_welcome_banner
 end
 # rubocop:enable Metrics/AbcSize, Metrics/MethodLength, Layout/LineLength
 
-def ask_want_instructions
+def want_instructions?
   answer = nil
   valid_answers = ['yes', 'y', 'no', 'n']
+  clear_screen
   loop do
-    clear_screen
     prompt "Do you want to read the instructions before you play (y/n)?"
     answer = gets.chomp.downcase
     break if valid_answers.include?(answer)
     prompt "Sorry, I didn't catch that..."
   end
-  answer
+  answer.start_with?('y')
 end
 
 # rubocop:disable Metrics/AbcSize, Metrics/MethodLength, Layout/LineLength, Layout/TrailingWhitespace
@@ -80,9 +80,9 @@ def display_instructions
   puts "──────────"
   prompt "We'll play with a normal 52-card deck"
   blank_space
-  prompt "The goal is to try to get as close to 21 points as possible, without going over"
+  prompt "The goal is to try to get as close to #{OPTIMAL_POINTS} points as possible, without going over"
   blank_space
-  prompt "If you go over 21, it's a 'bust' and you lose the game"
+  prompt "If you go over #{OPTIMAL_POINTS}, it's a 'bust' and you lose the game"
   press_return_to_continue?
   clear_screen
 
@@ -111,7 +111,7 @@ def display_instructions
   puts "────────────────────────"
   prompt "Once you've seen your cards, you can ask for as many additional cards as you want by typing 'Hit'"
   blank_space
-  prompt "Remember you want to get as close to 21 points as possible but without busting!"
+  prompt "Remember you want to get as close to #{OPTIMAL_POINTS} points as possible but without busting!"
   blank_space
   prompt "Once you are happy with the cards you have in hand, enter 'Stay'"
   blank_space
@@ -123,7 +123,7 @@ def display_instructions
   puts "────────────────────────"
   prompt "After both you and the computer have played, the cards are compared"
   blank_space
-  prompt "Whoever got closest to 21 without busting wins the game"
+  prompt "Whoever got closest to #{OPTIMAL_POINTS} without busting wins the game"
   press_return_to_continue?
   clear_screen
 
@@ -135,7 +135,7 @@ def display_instructions
   blank_space
   prompt "Ready? Let's play some rounds!"
   blank_space
-  prompt "The first to win 5 rounds wins the game"
+  prompt "The first to win #{ROUNDS_TO_WIN} rounds wins the game"
   press_return_to_continue?
   clear_screen
 end
@@ -161,6 +161,7 @@ def display_player_cards(hand)
   puts "│ └────────┘ │ │ └────────┘ │"
   puts "│ #{fcs}        #{fcs} │ │ #{scs}        #{scs} │"
   puts "└────────────┘ └────────────┘"
+  puts "    (#{value_with_aces_correction(hand)} points in total)"
   blank_space
 end
 # rubocop:enable Metrics/AbcSize, Metrics/MethodLength
@@ -227,12 +228,12 @@ end
 
 def display_current_hand(hand)
   puts "** Your current cards are: #{join(hand)}, " \
-       "which sum up #{calculate_value_of_hand(hand)} points**"
+       "which sum up #{value_with_aces_correction(hand)} points**"
 end
 
 def want_another_card?
   answer = nil
-  valid_answers = ['hit', 'stay']
+  valid_answers = ['hit', 'stay', 'h', 's']
   loop do
     prompt "Please enter 'Hit' if you want another card or 'Stay' if you don't"
     answer = gets.chomp.downcase
@@ -240,37 +241,40 @@ def want_another_card?
     prompt "Sorry, that's not a valid answer"
   end
 
-  return true if answer == 'hit'
-  false
+  answer.start_with?('h')
 end
 
 def calculate_value_of_hand(hand)
   card_values = hand.map { |card| card[0] }
   sum_of_values = 0
   card_values.each do |value|
-    if value == 'A'
-      sum_of_values += 11
-    elsif ['1', 'J', 'Q', 'K'].include?(value)
-      sum_of_values += 10
-    else
-      sum_of_values += value.to_i
-    end
-  end
-
-  card_values.select { |value| value == "A" }.count.times do
-    sum_of_values -= 10 if sum_of_values > OPTIMAL_POINTS
+    sum_of_values += if value == 'A'
+                       11
+                     elsif ['1', 'J', 'Q', 'K'].include?(value)
+                       10
+                     else
+                       value.to_i
+                     end
   end
 
   sum_of_values
 end
 
+def value_with_aces_correction(hand)
+  corrected_sum = calculate_value_of_hand(hand)
+  hand.select { |card| card[0] == "A" }.count.times do
+    corrected_sum -= 10 if corrected_sum > OPTIMAL_POINTS
+  end
+  corrected_sum
+end
+
 def busted?(hand)
-  calculate_value_of_hand(hand) > OPTIMAL_POINTS
+  value_with_aces_correction(hand) > OPTIMAL_POINTS
 end
 
 def display_player_busted_msg(hand)
   if busted?(hand)
-    blank_space
+    clear_screen
     puts "Sorry, you've busted!"
     puts "DEALER WINS THIS ROUND!"
     puts "───────────────────────"
@@ -279,7 +283,7 @@ end
 
 def display_dealer_busted_msg(hand)
   if busted?(hand)
-    blank_space
+    clear_screen
     puts "Dealer busted!"
     puts "YOU WIN THIS ROUND!"
     puts "───────────────────"
@@ -287,12 +291,12 @@ def display_dealer_busted_msg(hand)
 end
 
 def dealer_stop_hit?(hand)
-  calculate_value_of_hand(hand) >= DEALER_MAX_RISK
+  value_with_aces_correction(hand) >= DEALER_MAX_RISK
 end
 
 def detect_round_winner(player_hand, dealer_hand)
-  player_points = calculate_value_of_hand(player_hand)
-  dealer_points = calculate_value_of_hand(dealer_hand)
+  player_points = value_with_aces_correction(player_hand)
+  dealer_points = value_with_aces_correction(dealer_hand)
 
   if !busted?(player_hand) && !busted?(dealer_hand)
     if player_points > dealer_points
@@ -307,15 +311,15 @@ end
 
 def display_round_winner(player_hand, dealer_hand)
   if detect_round_winner(player_hand, dealer_hand) == 'player'
-    blank_space
+    clear_screen
     puts "YOU WIN THIS ROUND!"
     puts "───────────────────"
   elsif detect_round_winner(player_hand, dealer_hand) == 'dealer'
-    blank_space
+    clear_screen
     puts "DEALER WINS THIS ROUND!"
     puts "───────────────────────"
   elsif detect_round_winner(player_hand, dealer_hand) == 'tie'
-    blank_space
+    clear_screen
     puts "IT'S A TIE!"
     puts "───────────"
   end
@@ -324,10 +328,10 @@ end
 def display_round_summary(player_hand, dealer_hand, score)
   blank_space
   puts " ** Your hand in this round was" \
-       " #{join(player_hand)} (#{calculate_value_of_hand(player_hand)} points)"
+       " #{join(player_hand)} (#{value_with_aces_correction(player_hand)} points)"
   blank_space
   puts " ** Dealer hand in this round was" \
-       " #{join(dealer_hand)} (#{calculate_value_of_hand(dealer_hand)} points)"
+       " #{join(dealer_hand)} (#{value_with_aces_correction(dealer_hand)} points)"
   blank_space
   puts "┌─────────────────────────────────────────┐"
   puts "│ Your score is #{score[:player_score]}  " \
@@ -350,6 +354,12 @@ def update_scores!(player_hand, dealer_hand, score)
   score
 end
 
+def display_full_round_endings(player_hand, dealer_hand, score)
+  update_scores!(player_hand, dealer_hand, score)
+  display_round_winner(player_hand, dealer_hand)
+  display_round_summary(player_hand, dealer_hand, score)
+end
+
 def match_winner?(score)
   score == ROUNDS_TO_WIN
 end
@@ -362,18 +372,20 @@ end
 def display_final_winner(score)
   if match_winner?(score[:player_score])
     clear_screen
-    prompt "YOU HAVE WON 5 ROUNDS, SO YOU ARE THE FINAL WINNER." \
-           " CONGRATULATIONS!"
+    prompt "YOU HAVE WON #{ROUNDS_TO_WIN} ROUNDS, " \
+           "SO YOU ARE THE FINAL WINNER. "\
+           "CONGRATULATIONS!"
     blank_space
   elsif match_winner?(score[:dealer_score])
     clear_screen
-    prompt "DEALER HAS WON 5 ROUNDS, SO DEALER IS THE FINAL WINNER." \
-           " GOOD LUCK NEXT TIME!"
+    prompt "DEALER HAS WON #{ROUNDS_TO_WIN} ROUNDS, " \
+           "SO DEALER IS THE FINAL WINNER. "\
+           "GOOD LUCK NEXT TIME!"
     blank_space
   end
 end
 
-def ask_play_again
+def play_again?
   answer = nil
   valid_answers = ['y', 'n', 'yes', 'no']
   loop do
@@ -382,10 +394,10 @@ def ask_play_again
     break if valid_answers.include?(answer)
     prompt "Sorry, I didn't catch that..."
   end
-  answer
+  answer.start_with?('y')
 end
 
-def goodbye_msg
+def display_goodbye_msg
   prompt "Thanks for playing Twenty-one. Goodbye!"
   sleep(3)
   clear_screen
@@ -395,7 +407,7 @@ end
 display_welcome_banner
 
 loop do
-  display_instructions if ask_want_instructions.start_with?('y')
+  display_instructions if want_instructions?
   score = initialize_scores
 
   loop do
@@ -428,17 +440,14 @@ loop do
       display_dealer_busted_msg(dealer_hand)
     end
 
-    # determine winner and display round summary
-    update_scores!(player_hand, dealer_hand, score)
-    display_round_winner(player_hand, dealer_hand)
-    display_round_summary(player_hand, dealer_hand, score)
+    display_full_round_endings(player_hand, dealer_hand, score)
 
     break if final_winner?(score)
   end
 
   display_final_winner(score)
 
-  break unless ask_play_again.start_with?('y')
+  break unless play_again?
 end
 
-goodbye_msg
+display_goodbye_msg
