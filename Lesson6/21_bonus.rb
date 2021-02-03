@@ -274,7 +274,8 @@ end
 
 def display_player_busted_msg(hand)
   if busted?(hand)
-    clear_screen
+    blank_space
+    puts "───────────────────────"
     puts "Sorry, you've busted!"
     puts "DEALER WINS THIS ROUND!"
     puts "───────────────────────"
@@ -284,6 +285,7 @@ end
 def display_dealer_busted_msg(hand)
   if busted?(hand)
     clear_screen
+    puts "───────────────────"
     puts "Dealer busted!"
     puts "YOU WIN THIS ROUND!"
     puts "───────────────────"
@@ -292,6 +294,22 @@ end
 
 def dealer_stop_hit?(hand)
   value_with_aces_correction(hand) >= DEALER_MAX_RISK
+end
+
+def player_turn!(hand, deck)
+  loop do
+    break if busted?(hand) || !want_another_card?
+    hand << deal_cards!(deck)[0]
+    display_extra_card(hand)
+    display_current_hand(hand)
+  end
+end
+
+def dealer_turn!(hand, deck)
+  loop do
+    break if busted?(hand) || dealer_stop_hit?(hand)
+    hand << deal_cards!(deck)[0]
+  end
 end
 
 def detect_round_winner(player_hand, dealer_hand)
@@ -413,27 +431,18 @@ loop do
   loop do
     new_deck = initialize_deck
 
-    # deal initial cards
     player_hand = deal_cards!(new_deck, 2)
     dealer_hand = deal_cards!(new_deck, 2)
 
     display_player_cards(player_hand)
     display_dealer_card(dealer_hand)
 
-    loop do # ---------------- player turn
-      break if busted?(player_hand) || !want_another_card?
-      player_hand += deal_cards!(new_deck)
-      display_extra_card(player_hand)
-      display_current_hand(player_hand)
-    end
+    player_turn!(player_hand, new_deck)
 
     if busted?(player_hand)
       display_player_busted_msg(player_hand)
-    else # ---------------- dealer turn
-      loop do
-        break if busted?(dealer_hand) || dealer_stop_hit?(dealer_hand)
-        dealer_hand += deal_cards!(new_deck)
-      end
+    else
+      dealer_turn!(dealer_hand, new_deck)
     end
 
     if busted?(dealer_hand)
